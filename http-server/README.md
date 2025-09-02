@@ -16,7 +16,7 @@ The network (or internet) operates using IP addresses and ports.
 
 ## Binding to specific IPs
 
-* It refers to the process where an application (like a web server) is instructed to listen for incoming connections only on a specific network interface or IP address of the machine it is running on.
+* It refers to the process where an application (like a web server) is instructed to listen for incoming connections only on a specific network interface or IP address and port (of the machine it is running on).
 * Every machine has one or more network interfaces, each associated with an IP address (or multiple IPs, in some cases). By binding to a particular IP, the server limits where it will accept connections from.
 
 * Network Interfaces:- This is the 'software representation' of a network connection. Each interface is typically linked to an IP address. For example a machine might have:
