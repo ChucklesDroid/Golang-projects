@@ -1,8 +1,9 @@
 // USECASE
+// A TCP server protocol
 // $ go run main.go
 // $ curl localhost:8080
 // $ curl localhost:8080/hello-world
-// This can be also opened in a browser
+// This can be also opened in a browser / done via POSTMAN
 
 package main
 
@@ -57,8 +58,16 @@ func createUsers(w http.ResponseWriter, r *http.Request) {
 	cacheUser[len(cacheUser)+1] = user
 	cacheMutex.Unlock()
 
-	// enhance this by returning the user
-	w.WriteHeader(http.StatusNoContent)
+	// TODO: enhance this by returning the user [COMPLETED]
+	// NOTE: WriterHeader should be called at last, in this example calling it earlier than Header().Set("Content-Type", "application/json") doesn't set the header content type
+	w.Header().Set("Content-Type", "application/json")
+	j, err := json.Marshal(user)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
 }
 
 func getUser(w http.ResponseWriter, r *http.Request) {
@@ -71,7 +80,7 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 
 	cacheMutex.RLock()
 	user, ok := cacheUser[userId]
-	cacheMutex.Unlock()
+	cacheMutex.RUnlock()
 	if !ok {
 		http.Error(w, "user doesn't exist", http.StatusNotFound)
 		return
